@@ -1,0 +1,57 @@
+<script type="text/javascript">
+  var array = [0,1,2,3,4,5,6,7,8,9]; // defines array
+
+  function root(value) {
+    /*
+    * assuming this function invocation: union(3,7), where the root/index of the first value (array[3]) 
+    * is to be united (replaced) with the root/index of the second value (array[7]) and assuming no other 
+    * union has been executed yet:
+    * IN THE ROOT METHOD: The first value passed in is equal to its array index/root (3 === array[3]), so 
+    * we return that value because it is equivalent to its own root/index. The same is true for 7, (7 === array[7]). 
+    * IN THE UNION METHOD: we will assign the root/index of the first value (array[3]) to the root/index of the second value (array[7]). 
+    * At this point, value seven is the same as its root ( 7 === array[7]), so the new root of 3 will be array[7].
+    * So the new array after 'union(3, 7)' will be [0, 1, 2, 7, 4, 5, 6, 7, 8, 9] where array[3] points to array[7].
+    * IN THE CONNECTED METHOD: When we run connected(3, 7), we will execute the same process (invoke root()) for both arguments. At this 
+    * point 'value -> (3)' !== array[3] -> (7) so we will loop once and assign array[3] (7) to 'value' to get value = 7, the new root of array[3] 
+    * after the union operation. The second argument of connect is 7, whose root/index is the same as its value array[7] === 7, so we just 
+    * return that value. The result of connected(3, 7) will then return 7 === 7, which is true.
+    
+    * Let's perform another union, this time union(8,3):
+    * at this point array[8] === 8 so we just return that value
+    * however, array[3] !== 3 so we go into the loop and assign 'value' to 7, since that is the new root * of array[3];
+    * when the valued passed in is different than its array index (suppose array[3] = 7 and value = 3) 
+    * we  loop and assign the value of 'array[3]'(which is 7) to the variable 'value', which was passed 
+    * as 3,  so 'value' is now 7. 
+    * in the beginning of the second while loop iteration the logical expression will evaluate to false (
+    * value is now equal to array[value]: 7 === 7)
+    * then we return the value 7, which is the new root of array[8]. The returned value for root(8) is 8, and for root(3) is 7. The union method assigns array[8] to root(3), which is array[7] 
+    * So the new array after 'union(3, 7)' and 'union(8, 3)' will be [0, 1, 2, 7, 4, 5, 6, 7, 7, 9]
+    */
+    while (value !== array[value]) {
+      value = array[value];
+    }
+    return value;
+  }
+
+  function connected(valueOne, valueTwo) {
+    return root(valueOne) === root(valueTwo);
+  }
+
+  // the root of valueOne is assigned the value of the valueTwo's root
+  function union(valueOne, valueTwo) {
+    var valueToBeChanged = root(valueOne);
+    var valueToReplace = root(valueTwo);
+    array[valueToBeChanged] = valueToReplace;
+    
+    return array;
+  }
+
+  union(3,7);
+  console.log(array);
+  console.log(connected(3,7))
+
+  union(8,3);
+  console.log(array);
+  console.log(connected(8,3))
+
+</script>

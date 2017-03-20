@@ -1,0 +1,80 @@
+<script type="text/javascript">
+  // http://algs4.cs.princeton.edu/15uf/WeightedQuickUnionUF.java.html
+  var numbersArray = [];
+  var treeSize = [];
+  var treesCount;
+
+  // arrays construtor
+  function arraysConstructor(numberOfTrees) {
+    for (i = 0; i < numberOfTrees; i++) {
+      numbersArray[i] = i;
+      treeSize[i] = 1;
+      treesCount = i + 1; // could also be treesCount = numberOfTrees;
+    }
+  }
+
+  arraysConstructor(10);
+  console.log('original numbersArray: ', numbersArray);
+  console.log('original treeSize: ', treeSize);
+  console.log('original treesCount: ', treesCount);
+
+  function root(value) {
+    while(value !== numbersArray[value]) {
+      value = numbersArray[value];
+    }
+    return value;
+  }
+
+  function connected(valueA, valueB) {
+    return root(valueA) === root(valueB);
+  }
+
+  function union(valueA, valueB) {
+    var rootOfA = root(valueA);
+    var rootOfB = root(valueB);
+
+    if (rootOfA === rootOfB) return;
+
+    if (treeSize[rootOfA] < treeSize[rootOfB]) {
+      numbersArray[rootOfA] = rootOfB;
+      treeSize[rootOfB] += treeSize[rootOfA];
+    } else {
+      numbersArray[rootOfB] = rootOfA;
+      treeSize[rootOfA] += treeSize[rootOfB];
+    }
+
+    treesCount--;
+  }
+
+  union(0, 1);
+  console.log('--------------');
+  console.log('are 0 and 1 connected? ', connected(0, 1) );
+  console.log('numbersArray after union(0, 1): ', numbersArray);
+  console.log('treeSize after union(0, 1): ', treeSize);
+  console.log('treesCount union(0, 1): ', treesCount);
+
+  union(2, 3);
+  console.log('--------------');
+  console.log('are 2 and 3 connected? ', connected(2, 3) );
+  console.log('numbersArray after union(2, 3): ', numbersArray);
+  console.log('treeSize after union(2, 3): ', treeSize);
+  console.log('treesCount union(2, 3): ', treesCount);
+
+  union(2, 4);
+  console.log('--------------');
+  console.log('are 2 and 4 connected? ', connected(2, 4) );
+  console.log('numbersArray after union(2, 4): ', numbersArray);
+  console.log('treeSize after union(2, 4): ', treeSize);
+  console.log('treesCount union(2, 4): ', treesCount);
+
+  union(2, 0);
+  console.log('--------------');
+  console.log('are 2 and 0 connected? ', connected(2, 0) ); // true
+  console.log('numbersArray after union(2, 0): ', numbersArray); // [2, 0, 2, 2, 2, 5, 6, 7, 8, 9];
+  console.log('treeSize after union(2, 0): ', treeSize); // [2, 1, 5, 1, 1, 1, 1, 1, 1];
+  console.log('treesCount union(2, 0): ', treesCount); // 6
+
+
+
+
+</script>

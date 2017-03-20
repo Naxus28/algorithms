@@ -1,0 +1,103 @@
+<script type="text/javascript">
+  // 'numbersArray' initializes the array of trees to be united. Each index of the array is the root of a tree; the value in each root initially points to its own root (i.e. numbersArray[0] === 0, numbersArray[1] === 1, etc)
+  var numbersArray = []; 
+  
+  // 'treeSize' initializes the array that will keep track of each tree size. All trees start off with one element, so their size is one. Once two trees are united, the parent tree's size will increase by the size of the child tree and the child tree's will keep its size. Assuming no union was performed and we invoke uonion(0, 1) where threeSize[0] === 1, threeSize[1] === 1, we will arbitrarily assign one of the trees as parent and the other as child, because their size is the same (in our code below we assign the first root as parent and the second as child but it could be the other way around). After the roots are united, threeSize[0] === 2, and threeSize[1] === 1). 
+  // so we have 0 2 3 4 5 6 7 8 9 where 1 became a child of 0
+  //            |
+  //            1
+  // Suppose we now perform union(2,3) and then union(2,4), Resulting in threeSize[2] === 3, threeSize[3] === 1, and threeSize[4] === 1. We proceed with union(0,2) (or union(2,0), which will result the same): because threeSize[2] > threeSize[0], threeSize[0] will become a child of threeSize[2]. After running these operations the result will be threeSize[0] === 2, threeSize[1] === 1, threeSize[2] === 5, threeSize[3] === 1, and threeSize[4] === 1
+  // so 2 5 6 7 8 9, where two is parent of 0, 3, and 4, and grandparent of 1, and 3 is the parent of 1
+  //   /|\
+  //  0 3 4
+  //  |
+  //  1
+  var treeSize = [];
+
+  // varible used to count the number of threes after each union. In the example above, after all unions performed, 'treesCount' would be equal to 6. 
+  var treesCount;
+
+  // array constructor
+  function createArrays(arrayLength) {
+    for(i = 0; i < arrayLength; i++) {
+      treesCount = i;
+      numbersArray[i] = i;
+      treeSize[i] = 1; 
+    }
+  }
+
+  // creates an array with 10 trees (10 roots with 1 element each)
+  createArrays(10);
+
+
+  //return the total count of treess
+  function treesCount() {
+    return treesCount;
+  }
+
+  // returns the root of each value passed in (remember that although each root points to its own value at first, once an union is performed that will not be true anymore; i.e. after union(0,1), the root(1) is the same as root(0))
+  function root(value) {
+    while(value !== numbersArray[value]) {
+      value = numbersArray[value];
+    }
+
+    return value;
+  }
+
+  // check if the root of the values passed in are the same
+  function connected(valueA, valueB) {
+    return root(valueA) === root(valueB);
+  }
+
+  // unites the trees via their roots
+  function union(valueA, valueB) {
+     //FIRST
+     //get root (index) of value A
+     var rootA = root(valueA);
+     //get root (index) of value B
+     var rootB = root(valueB);
+
+     // THEN
+     // if their roots are the same they are in the same tree already
+     if (rootA == rootB) return;
+
+     // if rootA's tree is smaller than rootB's tree
+     // make smaller root point to larger one
+     if (treeSize[rootA] < treeSize[rootB]) {
+         numbersArray[rootA] = rootB; // now root of value A points to root of value B
+         treeSize[rootB] += treeSize[rootA]; // rootB's tree is now parent to rootA's tree so rootB's tree adds all children of rootA's tree 
+     } else {
+         // if rootB's tree is smaller than rootA's tree we do the opposite of above
+         // so we always add the smaller tree to the larger one
+         numbersArray[rootB] = rootA;
+         treeSize[rootA] += treeSize[rootB];
+     }
+
+     // once we make a tree childe of another tree we need to decrease the total number of trees by one
+     treesCount--;
+ }
+  console.log(numbersArray);
+  union(5,6);
+  console.log(numbersArray);
+  console.log(connected(5,6));
+
+  union(5,9);
+  console.log(numbersArray);
+  console.log(connected(5,9)); // true because now numbersArray[5] points to numbersArray[9]
+  console.log(connected(5,6)); // still true because now numbersArray[5] points to numbersArray[6], which points to numbersArray[9] since 6 was the new value of numbersArray[5]
+
+  union(4,6);
+  console.log(numbersArray);
+  console.log(connected(4,6)); // true
+  console.log(connected(4,5)); // true
+  console.log(connected(4,9)); // true
+
+  union(5,7);
+  console.log(numbersArray);
+  console.log(connected(5,5)); // true
+  console.log(connected(5,6)); // true
+  console.log(connected(5,7)); // true
+  console.log(connected(5,9)); // true
+
+
+</script>

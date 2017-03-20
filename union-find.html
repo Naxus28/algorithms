@@ -1,0 +1,52 @@
+<!-- QUICK FIND IS A SLOW ALOGORITHM - THE UNION OPERATION IS TOO EXPENSIVE BECAUSE IT TAKES QUADRATIC TIME - IT IS TOO SLOW FOR LARGE OBJECTS - QUADRATIC TIME SLOWS AS COMPUTER MEMORY INCREASES BACAUSE IT HAS TO PERFORM CHECKS ON MORE OBJECTS IN MEMORY EVENT WHEN COMPUTER PROCESSING SPEED MAY BE FASTER AS WELL -->
+<script>
+  var array = [0,1,2,3,4,5,6,7,8,9]; // defines array
+
+  // compares the values of two given array indexes and return whether or not they are connected (the same)
+  function connected(arrayEntryA, arrayEntryB) {
+    return array[arrayEntryA] === array[arrayEntryB];
+  }
+
+  // console.log array and chec if index 7 and 3 are connected (have the same value)
+  console.log(array);
+  console.log(connected(7, 3)); 
+
+  // indexWhoseValueWIllBeModified is the index whose value we want to change
+  // indexWhoseValueWillBeUsedToModify is the value we use to replace the current value of indexWhoseValueWIllBeModified
+  function union(indexWhoseValueWIllBeModified, indexWhoseValueWillBeUsedToModify) {
+    // get values of indexes to be united
+    var valueToBeReplaced = array[indexWhoseValueWIllBeModified];
+    var valueToReplace = array[indexWhoseValueWillBeUsedToModify];
+
+    /* the value of valueToBeReplaced may be the same for several indexes of the array; these indexes are so-called connected elements (they have the same value). So for every array index that has the same value we will replace with valueToReplace to make sure they will always be connected even if we change the value of one of the connected items i.e. in [1,2,3,4,1,6,1,8,2] indexes 0, 4, and 6 are connected (they point to value 1), and indexes 1 and 8 are connected as well (they point to value 2). If we change the value of index 4, we also need to change the values of index 0 and index 6 to keep them connected. The same applies to any other connection. We need a loop to perform those checks*/
+    
+    // loop through the whole array
+    for (i=0; i < array.length; i++) {
+      // if the value on the current index in loop is the same as the value we want to modify 'valueToBeReplaced', we replace that value with 'valueToReplace'
+      // say array[i] = 1 and valueToBeReplaced = 1 it means we want to modify the array where the index points to value 1. In the case of array [1,2,3,4,1,6,1,8,2], indexes 0, 4, and 6 would be replaced with the new value
+        if (array[i] === valueToBeReplaced) {
+          array[i] = valueToReplace;
+        }
+    }
+    return array;
+  }
+
+  // connects indexes array[7] and array[3], meaning current array[7] and array[n] === array[7] (any index whose value is the same as array[7]-- "connected to array[7]") will be replace by array[3] (the value of array index 3)
+  union(7, 3);
+
+  console.log(array); // [0, 1, 2, 3, 4, 5, 6, 3, 8, 9]
+  console.log(connected(7, 3));  // true
+
+  union(7, 8);
+  console.log(array); // [0, 1, 2, 8, 4, 5, 6, 8, 8, 9]
+  console.log(connected(7, 3));  // true
+
+  union(9, 3);
+  console.log(array); // [0, 1, 2, 8, 4, 5, 6, 8, 8, 8]
+  console.log(connected(9, 8));  // true
+
+  union(9, 0);
+  console.log(array); // [0, 1, 2, 0, 4, 5, 6, 0, 0, 0]
+  console.log(connected(0, 3));  // true
+
+</script>

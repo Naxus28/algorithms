@@ -1,0 +1,58 @@
+<script type="text/javascript">
+
+  // array constructor
+  function createArray(arrayLength) {
+    var numberArray = [];
+
+    for(i = 0; i < arrayLength; i++) {
+      numberArray.push(i);
+    }
+
+    return numberArray;
+  }
+  var numbers = createArray(10);
+
+  function root(value) {
+    while(value !== numbers[value]) {
+      value = numbers[value];
+    }
+
+    return value;
+  }
+
+  function connected(valueA, valueB) {
+    return root(valueA) === root(valueB);
+  }
+
+
+  function union(valueA, valueB) {
+    var valueToBeReplaced = root(valueA);
+    var valueToReplace = root(valueB);
+
+    numbers[valueToBeReplaced] = valueToReplace;
+  }
+
+  union(5,6);
+  console.log(numbers);
+  console.log(connected(5,6));
+
+  union(5,9);
+  console.log(numbers);
+  console.log(connected(5,9)); // true because now numbers[5] points to numbers[9]
+  console.log(connected(5,6)); // still true because now numbers[5] points to numbers[6], which points to numbers[9] since 6 was the new value of numbers[5]
+
+  union(4,6);
+  console.log(numbers);
+  console.log(connected(4,6)); // true
+  console.log(connected(4,5)); // true
+  console.log(connected(4,9)); // true
+
+  union(5,7);
+  console.log(numbers);
+  console.log(connected(5,5)); // true
+  console.log(connected(5,6)); // true
+  console.log(connected(5,7)); // true
+  console.log(connected(5,9)); // true
+
+
+</script>
